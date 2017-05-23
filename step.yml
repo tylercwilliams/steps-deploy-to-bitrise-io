@@ -126,3 +126,9 @@ outputs:
       description: |-
         Public Install Page's URL, if the
         *Enable public page for the App?* option was *enabled*.
+  - BITRISE_PUBLIC_INSTALL_PAGE_URL:
+    opts:
+      title: Public Install Page URL List
+      description: |-
+        Comma separated list of URLs for all build artifacts      
+        *Enable public page for the App?* option was *enabled*.
