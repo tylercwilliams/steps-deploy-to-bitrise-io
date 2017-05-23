@@ -81,6 +81,7 @@ puts " * is_enable_public_page: #{options[:is_enable_public_page]}"
 
 begin
   public_page_url = ''
+  public_url_list = Array.new
   if File.directory?(options[:deploy_path])
     if options[:is_compress]
       puts
@@ -127,6 +128,8 @@ begin
         disk_file_path = filepth
 
         a_public_page_url = ''
+	public_url_list = Array.new
+
         if File.extname(disk_file_path) == '.ipa'
           a_public_page_url = deploy_ipa_to_bitrise(
             disk_file_path,
@@ -136,6 +139,8 @@ begin
             options[:notify_email_list],
             options[:is_enable_public_page]
           )
+	  public_url_list << a_public_page_url
+
         elsif File.extname(disk_file_path) == '.apk'
           a_public_page_url = deploy_apk_to_bitrise(disk_file_path,
                                 options[:build_url],
@@ -144,11 +149,14 @@ begin
                                 options[:notify_email_list],
                                 options[:is_enable_public_page]
                                )
+	  public_url_list << a_public_page_url
+
         else
           a_public_page_url = deploy_file_to_bitrise(disk_file_path,
                                  options[:build_url],
                                  options[:api_token]
-                                )
+                                )  
+	  public_url_list << a_public_page_url
         end
 
         public_page_url = a_public_page_url if public_page_url == '' && !a_public_page_url.nil? && a_public_page_url != ''
@@ -184,10 +192,16 @@ begin
                             )
     end
     public_page_url = a_public_page_url
+    
   end
 
   # - Success
-  fail 'Failed to export BITRISE_PUBLIC_INSTALL_PAGE_URL' unless system("envman add --key BITRISE_PUBLIC_INSTALL_PAGE_URL --value '#{public_page_url}'")
+  fail 'failed to export bitrise_public_install_page_url' unless system("envman add --key bitrise_public_install_page_url --value '#{public_page_url}'")
+  
+  if public_url_list.size > 0
+	  public_url_list_string = public_url_list.join(",")
+	  fail 'failed to export bitrise_public_install_page_url_list' unless system("envman add --key bitrise_public_install_page_url_list --value '#{public_url_list_string}'")
+  end  
 
   puts
   puts '## Success'

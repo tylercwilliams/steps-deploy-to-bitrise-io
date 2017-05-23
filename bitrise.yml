@@ -27,7 +27,7 @@ workflows:
     - change-workdir:
         run_if: true
         inputs:
-        - path: ./_tmp
+                - path: ./_tmp
         - is_create_path: true
     - path::./:
         run_if: true
@@ -44,6 +44,7 @@ workflows:
         inputs:
         - content: |-
             echo "-> BITRISE_PUBLIC_INSTALL_PAGE_URL: ${BITRISE_PUBLIC_INSTALL_PAGE_URL}"
+            echo "-> BITRISE_PUBLIC_INSTALL_PAGE_URL_LIST: ${BITRISE_PUBLIC_INSTALL_PAGE_URL_LIST}"
 
   # ----------------------------------------------------------------
   # --- workflow to create Release version
